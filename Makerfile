@@ -1,0 +1,2 @@
+LIBDRAGON ?= libdragon
+include $(LIBDRAGON)/Makefile.gen
