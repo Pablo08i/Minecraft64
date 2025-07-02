@@ -1,0 +1,37 @@
+name: Build ROM
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+      with:
+        submodules: true
+
+    - name: Install dependencies
+      run: |
+        sudo apt update
+        sudo apt install -y build-essential gcc-mipsel-linux-gnu bison flex libpng-dev make
+
+    - name: Clone libdragon
+      run: |
+        git clone https://github.com/DragonMinded/libdragon.git
+        cd libdragon && make -j4 tools
+
+    - name: Build project
+      run: |
+        export LIBDRAGON=$(pwd)/libdragon
+        make
+
+    - name: Upload ROM
+      uses: actions/upload-artifact@v3
+      with:
+        name: minecraft64.z64
+        path: *.z64
