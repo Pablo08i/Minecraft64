@@ -34,4 +34,9 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: minecraft64.z64
-        path: *.z64
+        path: "*.z64"
+        
+- name: Convert textures
+      run: |
+        sudo apt install -y python3-pillow
+        python3 libdragon/tools/mksprite.py assets/grass.png > assets/grass.sprite
